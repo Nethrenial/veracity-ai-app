@@ -25,5 +25,6 @@ const { color, size, iconComponent } = toRefs(props)
             <iconComponent />
             <slot></slot>
         </span>
+        <slot v-else></slot>
     </VsButton>
 </template>

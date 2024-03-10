@@ -5,6 +5,7 @@ import Layouts from 'vite-plugin-vue-layouts';
 import path from 'node:path'
 import UnoCSS from 'unocss/vite'
 import Icons from 'unplugin-icons/vite'
+import { compression } from 'vite-plugin-compression2'
 
 export default defineConfig({
   plugins: [
@@ -12,7 +13,9 @@ export default defineConfig({
     VueRouter(),
     Layouts(),
     UnoCSS(),
-    vue()
+    vue(),
+    compression(),
+    compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/], deleteOriginalAssets: true })
   ],
   resolve: {
     alias: {

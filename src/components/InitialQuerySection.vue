@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import IcRoundSearch from '~icons/ic/round-search'
 import IcBaselineMic from '~icons/ic/baseline-mic'
 import ChatSuggestion from './ChatSuggestion.vue';
+import AppButton from './AppButton.vue';
 
 const chatModeStore = useChatModeStore()
 const query = ref("")
@@ -21,8 +22,11 @@ const suggestions = ["What is the revenue this year?", "What is the revenue last
 
 const voiceRecordElement = ref<HTMLAudioElement>()
 const mediaRecorder = ref<MediaRecorder | null>(null)
+const isAudioRecording = ref(false)
+const voiceRecording = ref<Blob | null>(null)
 
 function startAudioRecording() {
+    isAudioRecording.value = true
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
             mediaRecorder.value = new MediaRecorder(stream)
@@ -35,16 +39,38 @@ function startAudioRecording() {
             mediaRecorder.value.addEventListener("stop", () => {
                 const audioBlob = new Blob(audioChunks)
                 const audioUrl = URL.createObjectURL(audioBlob)
+                voiceRecording.value = audioBlob
                 voiceRecordElement.value!.src = audioUrl
+                isAudioRecording.value = false
             })
 
             mediaRecorder.value.start()
         })
 }
 
-function stopVoiceRecording() {
+
+function stopAudioRecording() {
     mediaRecorder.value!.stop()
     // voiceRecordingDialogOpen.value = false
+}
+
+function manageRecording() {
+    console.log(isAudioRecording.value)
+    if (isAudioRecording.value) {
+        stopAudioRecording()
+    } else {
+        startAudioRecording()
+    }
+
+}
+
+function clearRecording() {
+    voiceRecordElement.value!.src = ""
+    voiceRecording.value = null
+    // if currently recording, stop recording
+    if (isAudioRecording.value) {
+        stopAudioRecording()
+    }
 }
 
 </script>
@@ -75,12 +101,45 @@ function stopVoiceRecording() {
             <ChatSuggestion v-for="suggestion in suggestions" :key="suggestion" :text="suggestion" />
         </div>
     </section>
-    <vs-dialog v-model="voiceRecordingDialogOpen">
+    <vs-dialog v-model="voiceRecordingDialogOpen" prevent-close>
         <template #header>
-            <h3>Speak and pless stop when you're finished</h3>
+            <h3>Click on the mic to start/stop recording</h3>
         </template>
-        <vs-button @click="startAudioRecording">Start audio recording</vs-button>
-        <vs-button @click="stopVoiceRecording">Stop audio recording</vs-button>
-        <audio src="" ref="voiceRecordElement" controls></audio>
+        <div class="flex flex-col gap-4 items-center justify-center">
+
+            <IcBaselineMic class="text-8xl cursor-pointer" :class="isAudioRecording ? 'pulsating-red' : ''"
+                @click="manageRecording" />
+            <audio src="" ref="voiceRecordElement" controls></audio>
+        </div>
+        <template #footer>
+            <div class="flex items-center justify-center gap-4">
+                <AppButton @click="clearRecording" color="danger" type="transparent">Clear</AppButton>
+                <AppButton @click="setVoiceRecordingDialogOpen(false)" :disabled="isAudioRecording">Submit</AppButton>
+            </div>
+        </template>
     </vs-dialog>
 </template>
+
+
+<style lang="scss">
+.pulsating-red {
+    animation: pulsate 1s infinite;
+}
+
+@keyframes pulsate {
+    0% {
+        color: red;
+        transform: scale(1);
+    }
+
+    50% {
+        color: black;
+        transform: scale(1.1);
+    }
+
+    100% {
+        color: red;
+        transform: scale(1);
+    }
+}
+</style>

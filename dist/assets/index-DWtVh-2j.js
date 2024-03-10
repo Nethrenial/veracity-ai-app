@@ -1,1 +1,0 @@
-import{a as n,o as r,g as a}from"./index-IXilXQ-B.js";const _=(e,t)=>{const s=e.__vccOpts||e;for(const[c,o]of t)s[c]=o;return s},d={},i={class:"flex items-center justify-center"},f=a("h1",{class:"text-6xl"},"Dashboard Page",-1),l=[f];function x(e,t){return r(),n("div",i,l)}const m=_(d,[["render",x]]);export{m as default};
