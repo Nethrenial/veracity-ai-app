@@ -15,7 +15,7 @@ export default defineConfig({
     UnoCSS(),
     vue(),
     compression(),
-    compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/], deleteOriginalAssets: true })
+    compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] })
   ],
   resolve: {
     alias: {
