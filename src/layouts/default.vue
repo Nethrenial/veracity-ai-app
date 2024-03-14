@@ -4,12 +4,14 @@ import AppHeader from '~/components/AppHeader.vue';
 </script>
 
 <template>
-    <AppHeader />
-    <RouterView v-slot="{ Component, route }">
-        <transition name="fade" mode="out-in">
-            <component :is="Component" :key="route.path" />
-        </transition>
-    </RouterView>
+    <div class="w-screen h-screen " :style="{ overflow: 'hidden' }">
+        <AppHeader />
+        <RouterView v-slot="{ Component, route }">
+            <transition name="fade" mode="out-in">
+                <component :is="Component" :key="route.path" />
+            </transition>
+        </RouterView>
+    </div>
 </template>
 
 <style lang="scss">

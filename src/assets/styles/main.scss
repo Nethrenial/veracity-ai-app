@@ -1,5 +1,7 @@
 :root {
     --text-light: #9C9C9C;
+    --brand: rgb(87, 77, 196);
+    --brand-transparent: rgba(87, 77, 196, 0.3);
 }
 
 
@@ -7,6 +9,8 @@ body {
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     font-style: normal;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 
